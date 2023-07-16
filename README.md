@@ -41,5 +41,12 @@ if __name__ == '__main__':
 Resources
 ---------
 
-- [Documentation](http://flask-mysqldb.readthedocs.org/en/latest/)
-- [PyPI](https://pypi.python.org/pypi/Flask-MySQLdb)
+## STUDNET MANAGEMENT SYSTEM
+```
+test account: weiwei
+```
+### LOGIN
+
+- [login](./login.png)
+### MANAGEMENT
+- [management](./management.png)
