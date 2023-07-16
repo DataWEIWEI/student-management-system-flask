@@ -44,6 +44,7 @@ Resources
 ## STUDNET MANAGEMENT SYSTEM
 ```
 test account: weiwei
+password: 12345678
 ```
 ### LOGIN
 
