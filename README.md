@@ -47,6 +47,6 @@ test account: weiwei
 ```
 ### LOGIN
 
-- ![login](./login.png)
+![login](./login.png)
 ### MANAGEMENT
-- ![management](./management.png)
+![management](./management.png)
