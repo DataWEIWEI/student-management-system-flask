@@ -1,0 +1,318 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="/static/科技.css">
+    </head>
+
+    <body>
+        <canvas id="my_canvas" style="position: absolute;top: 0;z-index: -1">
+            ></canvas>
+    </body>
+
+</html>
+<!-- 引入粒子插件 -->
+<script src="/static/particle.min.js"></script>
+<script>
+    // 初始化粒子（画布id）
+    particle.init('my_canvas');
+</script>
+
+<script language="'JavaScript">
+    function myrefresh()
+    {
+        window.location.reload();
+    }
+</script>
+{% extends "base.html" %}
+{% block title %}学生信息录入管理{% endblock %}
+{% block page_content %}
+    <!-- 基于 bootstrap 修改的模态对话框 -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="edit-student">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">更新学生信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学生学号</label>
+                            <div class="col-sm-5">
+                                <input disabled="disabled" id="Sno" class="fomm-control" placeholder="学生学号">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学生姓名</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="Sname" class="form-control" placeholder="学生姓名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学生性别</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="Sex" class="form-control" placeholder="学生性别">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">院系名称</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="Sdept" class="form-control" placeholder="院系名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">出生日期</label>
+                            <div class="col-sm-5">
+                                <input type="text" id="Csrq" class="form-control" placeholder="出生日期">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭窗口</button>
+                    <button type="button" class="btn btn-primary" id="save-stu">保存更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/jquery-3.5.1.js"></script>
+    <script src="/static/bootstrap.js"></script>
+    <script src="/static/echarts.min.js"></script>
+    <script>
+        $(document).on(
+            'click', '.update-btn', function () 
+            {
+                // 点击更新按钮的事件函数
+                var Sno = $(this).attr('data-Sno');
+                var Sname = $(this).attr('data-Sname');
+                var Sex = $(this).attr('data-Sex');
+                var Sdept = $(this).attr('data-Sdept');
+                var Csrq = $(this).attr('data-Csrq');
+                // 给 id 设置列表中的值，即模态对对话框中设置值
+                $('#Sno').val(Sno);
+                $('#Sname').val(Sname);
+                $('#Sex').val(Sex);
+                $('#Sdept').val(Sdept);
+                $('#Csrq').val(Csrq);
+                $('#edit-student').modal('show');
+                // 显示模态对话框
+            }
+        );
+        $('#save-stu').on
+        (
+            'click', function() 
+            {
+                // 模态对话框中修改值后点击 save 的事件函数
+                var Sno = $('#Sno').val();
+                var Sname = $('#Sname').val();
+                var Sex = $('#Sex').val();
+                var Sdept = $('#Sdept').val();
+                var Csrq = $('#Csrq').val();
+                $.get
+                (
+                    '/updatedata?Sname=' + Sname + '&Sno=' + Sno + '&Sex=' + Sex + '&Sdept=' + Sdept + '&Csrq=' + Csrq, function (res)
+                    {
+                        alert("更新成功！");
+                        $("#edit-student").modal('hide');
+                    }
+                )
+            }
+        );
+    </script>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>学生学号</th>
+            <th>学生姓名</th>
+            <th>学生性别</th>
+            <th>院系名称</th>
+            <th>出生日期</th>
+            <th>操作</th>
+        </tr>
+        <form class="login-form" id="S_lgoin_form" action="/addstudent" method="get" novalidate="novalidate">
+            <tr>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="学生学号" name="Sno" value="">
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="学生姓名" name="Sname" value="">
+                </th>
+                <th>
+                    <select class="form-control placeholder-no-fix" type="text" name="Sex">
+                        <option>男</option>
+                        <option>女</option>
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="院系名称" name="Sdept" value="">
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="出生日期" name="Csrq" value="">
+                </th>
+                <th>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary pull-right">
+                            添加记录<i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </form>
+    </table>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>查询字段选择</th>
+            <th>查询类型输入</th>
+            <th>查询内容输入</th>
+        </tr>
+        <form class="login-form" id="query_form" action="/querystudent" method="post" novalidate="novalidate">
+            <tr>
+                <th>
+                    <select class="form-control placeholder-no-fix" type="text" name="query_field" id="query_field" onchange="setMajor()">
+                        <option value="-1">--请选择--</option>
+                        <option value="0">学号</option>
+                        <option value="1">姓名</option>
+                        <option value="2">性别</option>
+                        <option value="3">院系</option>
+                    </select>
+                </th>
+                <th>
+                    <select class="form-control placeholder-no-fix" type="text" name="query_type" id="query_type">
+                        <option value="-1">--请先选择字段--</option>
+                    </select>
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="输入查询内容" name="query_content" id="query_content" value="">
+                </th>
+                <th>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary pull-right">
+                            显示查询
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </form>
+    </table>
+
+    <script language="JavaScript">
+        var d = new Array();    // 用数组定义下拉项
+        d[0] = ['=', '>', '<', 'Like'];
+        d[1] = ['=', 'Like'];
+        d[2] = ['=', 'Like'];
+        d[3] = ['=', 'Like'];
+        function setMajor()
+        {
+            var index = $("[name=query_field]").val();   // html 取值
+            var major = $("[name=query_type]"); // html 取值
+            if (index != -1)
+            {
+                major.empty();
+                for (i = 0; i < d[index].length; i ++)
+                {
+                    var option = new Option(d[index][i], i + 1);
+                    major.append(option);
+                }
+            }
+            else 
+            {
+                major.empty();
+            }
+        }
+    </script>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>学号选择</th>
+            <th>课程选择</th>
+            <th>院系选择</th>
+            <th>提交成绩查询</th>
+        </tr>
+        <form class="login-form" id="querysc_form" action="/querysc" method="post" novalidate="novalidate">
+            <tr>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="输入查询学号" name="querySno" id="querySno" value="">
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="输入查询课程号" name="queryCno" id="queryCno" value="">
+                </th>
+                <th>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="输入查询院系号" name="querySdept" id="querySdept" value="">
+                </th>
+                <th>
+                    <select class="form-control placeholder-no-fix" type="text" name="queryOrder" id="queryOrder">
+                        <option value="0">正序排列</option>
+                        <option value="1">倒序排列</option>
+                    </select>
+                </th>
+                <th>
+                    <div class="form-actions">
+                        <button type="submit" onclick="hidetable();" class="btn btn-primary pull-right">
+                            成绩查询
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </form>
+    </table>
+
+    <table class="table table-bordered" id="all_table">
+        {% if data %}
+            <tr>
+                <th>学生学号</th>
+                <th>学生姓名</th>
+                <th>学生性别</th>
+                <th>院系名称</th>
+                <th>出生日期</th>
+                <th>数据删除</th>
+                <th>数据更新</th>
+            </tr>
+        {% endif %}
+        {% for i in data %}
+            <tr>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[2] }}</td>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>{{ i[5] }}</td>
+                <td><a href="{{ url_for('del_student', Sno=i[1]) }}">删除</a></td>
+                <td>
+                    <button class="update-btn" data-Sno={{ i[1] }} data-Sname={{ i[2] }} data-Sex={{ i[3] }} data-Sdept={{ i[4] }} data-Csrq={{ i[5] }}>更新</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table class="table table-bordered" id="query_table">
+        {% if querydata %}
+            <tr>
+                <th>院系名称</th>
+                <th>学生学号</th>
+                <th>学生姓名</th>
+                <th>课程名称</th>
+                <th>课程分数</th>
+                <th>分数分布图</th>
+            </tr>
+        {% endif %}
+        {% for i in querydata %}
+            <tr>
+                <td>{{ i[0] }}</td>
+                <td>{{ i[1] }}</td>
+                <td>{{ i[2] }}</td>
+                <td>{{ i[3] }}</td>
+                <td>{{ i[4] }}</td>
+                <td>
+                    <a href="{{ url_for('showmap', Cname=i[3]) }}">显示</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
